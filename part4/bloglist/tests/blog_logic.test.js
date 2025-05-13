@@ -107,3 +107,37 @@ describe('total likes', () => {
     assert.strictEqual(result, 36)
   })
 })
+
+describe('total blogs', () => {
+  test('when list has no blogs, it\'s null', () => {
+    const result = listHelper.mostBlogs(emptyList)
+    assert.strictEqual(result, null)
+  })
+
+  test('when list has only one blog, equals an object with that author name and 1', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.deepStrictEqual(result, { [ listWithOneBlog[0].author ] : 1})
+  })
+
+  test('when list has more than one blog, equals an object with the most frequent author and the number of blogs of that author', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, { "Robert C. Martin": 3 })
+  })
+})
+
+describe('most likes', () => {
+  test('when list has no blogs, it\'s null', () => {
+    const result = listHelper.mostLikes(emptyList)
+    assert.strictEqual(result, null)
+  })
+
+  test('when list has only one blog, equals an object with that author name and the number of likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, { [ listWithOneBlog[0].author ] : listWithOneBlog[0].likes})
+  })
+
+  test('when list has more than one blog, equals an object with the most liked author and the number of likes of that author', () => {
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, { "Edsger W. Dijkstra": 17 })
+  })
+})
