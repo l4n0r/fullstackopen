@@ -5,8 +5,25 @@ POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
 
 {
-    "title": "test3okok",
+    "title": "test3okok123",
     "author": "1234iokok5",
     "url": "asdfgv",
-    "likes": 35
+    "likes": 21,
+    "userId": "5a422a851b54a676234d1901"
+}
+
+###
+DELETE http://localhost:3001/api/blogs/681c6bf7e4aefa669603baa2 HTTP/1.1
+
+###
+GET http://localhost:3001/api/users HTTP/1.1
+
+###
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
+    "name": "Administrator",
+    "password": "admin123"
 }
