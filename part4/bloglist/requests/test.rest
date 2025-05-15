@@ -3,17 +3,18 @@ GET http://localhost:3001/api/blogs HTTP/1.1
 ###
 POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjgyNjRmNWUwMDA3NDkzNGQ2ZjY3N2VjIiwiaWF0IjoxNzQ3MzQxNzE0LCJleHAiOjE3NDczNDUzMTR9.OPQcDnkKaZprGAPVObYlURnPpKSpZehsJaQv55-is3M
 
 {
-    "title": "test3okok123",
+    "title": "ciaociao",
     "author": "1234iokok5",
-    "url": "asdfgv",
-    "likes": 21,
-    "userId": "5a422a851b54a676234d1901"
+    "url": "asdfgvacd",
+    "likes": 0
 }
 
 ###
-DELETE http://localhost:3001/api/blogs/681c6bf7e4aefa669603baa2 HTTP/1.1
+DELETE http://localhost:3001/api/blogs/682652db40d5e02503efb356 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlkIjoiNjgyNjRmNWUwMDA3NDkzNGQ2ZjY3N2VjIiwiaWF0IjoxNzQ3MzQxNzE0LCJleHAiOjE3NDczNDUzMTR9.OPQcDnkKaZprGAPVObYlURnPpKSpZehsJaQv55-is3M
 
 ###
 GET http://localhost:3001/api/users HTTP/1.1
@@ -23,7 +24,16 @@ POST http://localhost:3001/api/users HTTP/1.1
 content-type: application/json
 
 {
-    "username": "admin",
-    "name": "Administrator",
-    "password": "admin123"
+    "username": "admin1",
+    "name": "Administrator1",
+    "password": "admin1"
+}
+
+###
+POST http://localhost:3001/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "admin1",
+    "password": "admin1"
 }
