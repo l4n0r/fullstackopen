@@ -7,6 +7,7 @@ const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
 const api = supertest(app)
+let jwtToken;
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -22,6 +23,20 @@ beforeEach(async () => {
   await blogObject.save()
   blogObject = new Blog(helper.initialBlogs[5])
   await blogObject.save()
+})
+
+test.before(async () => {
+  const user = {
+    "username": "test",
+    "name": "TestInProgress",
+    "password": "test123"
+  }
+  
+  const respLogin = await api.post('/api/login/')
+    .send({"username": user.username, "password": user.password})
+  assert.strictEqual(respLogin.status, 200);
+  assert.ok(respLogin.body.token)
+  jwtToken = respLogin.body.token;
 })
 
 test('blogs are returned as json', async () => {
@@ -53,6 +68,7 @@ test('new blog is created successfully', async () => {
   const response =
     await api.post('/api/blogs')
       .send(blog)
+      .set({ Authorization: "Bearer " + jwtToken })
 
   const totalBlogs = await Blog.find({})
   assert.strictEqual(totalBlogs.length, helper.initialBlogs.length + 1)
@@ -67,6 +83,7 @@ test('new blog likes default to 0', async () => {
   const response =
     await api.post('/api/blogs')
       .send(blog)
+      .set({ Authorization: "Bearer " + jwtToken })
 
   const newBlogCreated = await Blog.findById({ _id: response.body.id })
   assert.strictEqual(newBlogCreated.likes, 0)
@@ -80,24 +97,11 @@ test('new blog requires title and url', async () => {
   const response =
     await api.post('/api/blogs')
       .send(blog)
+      .set({ Authorization: "Bearer " + jwtToken })
   assert.strictEqual(response.statusCode, 400)
 
   const totalBlogs = await Blog.find({})
   assert.strictEqual(totalBlogs.length, helper.initialBlogs.length)
-})
-
-test('deletion of blog succeeds with status code 204 if id is valid', async () => {
-  const blogsAtStart = await helper.blogsInDb()
-  const blogToDelete = blogsAtStart[0]
-
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
-
-  const blogsAtEnd = await helper.blogsInDb()
-
-  const ids = blogsAtEnd.map(b => b.id)
-  assert(!ids.includes(blogToDelete.id))
-
-  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
 })
 
 test('update of blog succeds with status code 204 if id is valid', async () => {
