@@ -1,13 +1,15 @@
-const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
+import '../App.css'
 
-  return (
-    <div className="error">
-      {message}
-    </div>
-  )
+const Notification = ({ message, success }) => {
+	if (message === null) {
+		return null
+	}
+
+	return (
+		<div className={success ? 'success' : 'error'}>
+			{message}
+		</div>
+	)
 }
 
 export default Notification
