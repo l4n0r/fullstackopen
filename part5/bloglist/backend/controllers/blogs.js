@@ -38,16 +38,23 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.put('/:id', async (request, response) => {
-  const { likes } = request.body
+blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
+  const user = await User.findById(request.userId)
+  if (!user) {
+    return response.status(400).json({ error: 'userId missing or not valid' })
+  }
+
   const blog = await Blog.findById(request.params.id)
   if (!blog) {
     return response.status(404).end()
   }
 
-  blog.likes = likes
-  const result = await blog.save()
-  response.status(204).json(result)
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    blog.id,
+    { $inc: { likes: 1 } },
+    { new: true }
+  )
+  response.status(201).json(updatedBlog)
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
@@ -63,7 +70,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
   if (blog.user.toString() !== user.id) {
     return response.status(400).json({ error: 'user is not owner of blog' })
   }
-  
+
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
